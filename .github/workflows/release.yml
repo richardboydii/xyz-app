@@ -12,6 +12,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
+  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
   
 jobs:                                            
   release:     
@@ -83,6 +84,11 @@ jobs:
     - name: Set EKS Info
       run: |
         aws eks --region ${{env.AWS_REGION}} update-kubeconfig --name ${{env.EKS_CLUSTER}}
+
+    - name: Check Cluster
+      uses: actions-hub/kubectl@master
+      with:
+        args: get pods
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
