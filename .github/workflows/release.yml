@@ -86,9 +86,8 @@ jobs:
         aws eks --region ${{env.AWS_REGION}} update-kubeconfig --name ${{env.EKS_CLUSTER}}
 
     - name: Check Cluster
-      uses: actions-hub/kubectl@master
-      with:
-        args: get pods
+      run: |
+        kubectl version --short
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
