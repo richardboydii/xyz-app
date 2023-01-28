@@ -83,7 +83,7 @@ jobs:
 
     - name: Set EKS Info
       run: |
-        aws eks update-kubeconfig --name ${{env.EKS_CLUSTER}} --region ${{env.AWS_REGION}} --role-arn arn:aws:iam::086911230249:role/EC2AdminAccess
+        aws eks update-kubeconfig --name ${{env.EKS_CLUSTER}} --region ${{env.AWS_REGION}}
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform

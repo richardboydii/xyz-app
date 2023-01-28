@@ -62,7 +62,7 @@ resource "kubernetes_deployment" "xyz-demo-app" {
           name  = "xyzdemoapp"
 
           port {
-            container_port = 5000
+            container_port = 80
           }
 
           resources {
