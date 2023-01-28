@@ -92,8 +92,8 @@ resource "kubernetes_service" "xyz-demo-elb" {
       App = kubernetes_deployment.xyz-demo-app.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port        = 5000
-      target_port = 5000
+      port        = 80
+      target_port = 80
     }
 
     type = "LoadBalancer"
