@@ -116,10 +116,10 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -chdir=production -input=false
+      run: terraform -chdir=production plan -input=false
 
     # On push to "main", build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -chdir=production -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{env.SHA_SHORT}}"
+      run: terraform -chdir=production apply -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{env.SHA_SHORT}}"
       
