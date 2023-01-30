@@ -61,6 +61,12 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
+    # Generate a SBOM with Anchore.
+    - uses: anchore/sbom-action@v0
+      with:
+        path: ./
+
+
     # Set the image tag.
     - name: Set env
       run: echo "SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
