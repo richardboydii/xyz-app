@@ -13,7 +13,7 @@ env:
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
   KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-  SHA_SHORT: ${{ env.SHA_SHORT }}
+  SHA_SHORT: "latest"
   
 jobs:                                            
   release:     
@@ -85,7 +85,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: richardboydii/xyz-demo-app:latest,richardboydii/xyz-demo-app:${{SHA_SHORT}}
+        tags: richardboydii/xyz-demo-app:latest,richardboydii/xyz-demo-app:${{env.SHA_SHORT}}
 
     #Configure AWS credentials.
     - name: Configure AWS credentials                          
@@ -117,4 +117,5 @@ jobs:
     # On push to "main", build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{SHA_SHORT}}"
+      # run: terraform apply -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{SHA_SHORT}}"
+      run: terraform apply -auto-approve -input=false
