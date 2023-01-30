@@ -13,6 +13,7 @@ env:
   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
   KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+  SHA_SHORT: ${{ env.SHA_SHORT }}
   
 jobs:                                            
   release:     
