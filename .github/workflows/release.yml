@@ -60,6 +60,10 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
+    # Set the image tag.
+    - name: Set env
+      run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+    
     # Setup QEMU, BuildX, and Docker Hub login.
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -80,7 +84,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: richardboydii/xyz-demo-app:latest
+        tags: richardboydii/xyz-demo-app:latest,richardboydii/xyz-demo-app:${{GITHUB_SHA_SHORT}}
 
     #Configure AWS credentials.
     - name: Configure AWS credentials                          
@@ -112,4 +116,4 @@ jobs:
     # On push to "main", build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false
+      run: terraform apply -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{GITHUB_SHA_SHORT}}"

@@ -58,7 +58,7 @@ resource "kubernetes_deployment" "xyz-demo-app" {
       }
       spec {
         container {
-          image = "richardboydii/xyz-demo-app:latest"
+          image = var.prod_image
           name  = "xyzdemoapp"
 
           port {
