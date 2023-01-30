@@ -59,7 +59,7 @@ resource "kubernetes_deployment" "xyz-demo-app-prod" {
       spec {
         container {
           image = var.prod_image
-          name  = "xyzdemoappProd"
+          name  = "xyzdemoappprod"
 
           port {
             container_port = 80
