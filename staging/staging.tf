@@ -35,7 +35,7 @@ provider "kubernetes" {
 }
 
 # This defines the kubernetes deployment for the demo app.
-resource "kubernetes_deployment" "xyz-demo-app-stage" {
+resource "kubernetes_deployment" "xyz-demo-stage" {
   metadata {
     name = "xyz-demo-app-stage"
     labels = {
@@ -59,7 +59,7 @@ resource "kubernetes_deployment" "xyz-demo-app-stage" {
       spec {
         container {
           image = var.stage_image
-          name  = "xyzdemoappStage"
+          name  = "xyzdemoappstage"
 
           port {
             container_port = 80
