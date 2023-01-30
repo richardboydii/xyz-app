@@ -13,7 +13,7 @@ terraform {
   
   backend "s3" {
     bucket = "xyz-demo-tf-state"
-    key    = "xyz-demo-app-state"
+    key    = "xyz-demo-app-state-prod"
     region = "us-east-2"
     dynamodb_table = "xyz-tf-state-db"
   } 

@@ -35,11 +35,11 @@ provider "kubernetes" {
 }
 
 # This defines the kubernetes deployment for the demo app.
-resource "kubernetes_deployment" "xyz-demo-app" {
+resource "kubernetes_deployment" "xyz-demo-app-prod" {
   metadata {
-    name = "xyz-demo-app"
+    name = "xyz-demo-app-prod"
     labels = {
-      App = "XYZDemoApp"
+      App = "XYZDemoAppProd"
     }
   }
 
@@ -47,19 +47,19 @@ resource "kubernetes_deployment" "xyz-demo-app" {
     replicas = 2
     selector {
       match_labels = {
-        App = "XYZDemoApp"
+        App = "XYZDemoAppProd"
       }
     }
     template {
       metadata {
         labels = {
-          App = "XYZDemoApp"
+          App = "XYZDemoAppProd"
         }
       }
       spec {
         container {
           image = var.prod_image
-          name  = "xyzdemoapp"
+          name  = "xyzdemoappprod"
 
           port {
             container_port = 80
@@ -83,13 +83,13 @@ resource "kubernetes_deployment" "xyz-demo-app" {
 
 # Define a load balancer for our demo app.
 
-resource "kubernetes_service" "xyz-demo-elb" {
+resource "kubernetes_service" "xyz-demo-elb-prod" {
   metadata {
-    name = "xyz-demo-elb"
+    name = "xyz-demo-elb-prod"
   }
   spec {
     selector = {
-      App = kubernetes_deployment.xyz-demo-app.spec.0.template.0.metadata[0].labels.App
+      App = kubernetes_deployment.xyz-demo-app-prod.spec.0.template.0.metadata[0].labels.App
     }
     port {
       port        = 80
@@ -101,5 +101,5 @@ resource "kubernetes_service" "xyz-demo-elb" {
 }
 
 output "lb_ip" {
-  value = kubernetes_service.xyz-demo-elb.status.0.load_balancer.0.ingress.0.hostname
+  value = kubernetes_service.xyz-demo-elb-prod.status.0.load_balancer.0.ingress.0.hostname
 }

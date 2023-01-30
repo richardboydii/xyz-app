@@ -1,8 +1,8 @@
-name: Release
+name: Staging
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "staging" ]
   pull_request:
 
 env:
@@ -10,16 +10,14 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
-  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
   SHA_SHORT: "latest"
   
 jobs:                                            
   release:     
-    name: Release                                
+    name: Staging                                
     runs-on: ubuntu-latest                       
-    environment: production
+    environment: staging
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -61,12 +59,6 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     
-    # Generate a SBOM with Anchore.
-    - uses: anchore/sbom-action@v0
-      with:
-        path: ./
-
-
     # Set the image tag.
     - name: Set env
       run: echo "SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
@@ -91,7 +83,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: richardboydii/xyz-demo-app:latest,richardboydii/xyz-demo-app:${{env.SHA_SHORT}}
+        tags: richardboydii/xyz-demo-app:${{env.SHA_SHORT}}
 
     #Configure AWS credentials.
     - name: Configure AWS credentials                          
@@ -114,14 +106,14 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform -chdir=staging init
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: terraform -chdir=staging plan -input=false
 
     # On push to "main", build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -var="prod_image=richardboydii/xyz-demo-app:${{env.SHA_SHORT}}"
+      run: terraform -chdir=staging apply -auto-approve -input=false -var="stage_image=richardboydii/xyz-demo-app:${{env.SHA_SHORT}}"
       
