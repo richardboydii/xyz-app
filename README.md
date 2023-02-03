@@ -16,5 +16,5 @@ The app binds to port `80` on all IPs.
 ## Deployment
 The app uses [Terraform](https://www.terraform.io/) to create a Kubernetes Deployment 
 on the cluster provisioned in [xyz-infrastructure](https://github.com/richardboydii/xyz-infrastructure).
-GitHub Actions runs the job anytime a push or merge is made to main. It deploys 
-2 replicas by default backed by a Classic Load Balancer.
+GitHub Actions runs the job anytime a push or merge is made to main or staging. 
+It deploys 2 replicas by default backed by a Classic Load Balancer.
